@@ -1,17 +1,21 @@
 package com.codewithfk.quickernotes
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.codewithfk.quickernotes.db.NoteDatabase
 import com.codewithfk.quickernotes.model.Note
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 
-class HomeViewModel : ViewModel() {
+import kotlinx.coroutines.launch
 
-    private val _notes = MutableStateFlow<List<Note>>(emptyList())
-    val notes = _notes.asStateFlow()
+class HomeViewModel(noteDatabase: NoteDatabase) : ViewModel() {
+
+    private val dao = noteDatabase.noteDao()
+    private val _notes = dao.getAllNotes()
+    val notes = _notes
 
     fun addNotes(note: Note) {
-        _notes.update { it + note }
+        viewModelScope.launch {
+            dao.insertNote(note)
+        }
     }
 }

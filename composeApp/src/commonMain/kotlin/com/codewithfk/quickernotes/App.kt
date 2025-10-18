@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.codewithfk.quickernotes.db.NoteDatabase
 import com.codewithfk.quickernotes.model.Note
 import com.codewithfk.quickernotes.notes.ListNotesScreen
 import com.codewithfk.quickernotes.ui.theme.QuickNotesAppTheme
@@ -39,10 +40,10 @@ import quickernotes.composeapp.generated.resources.rafiki
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
-fun App() {
+fun App(database: NoteDatabase) {
     QuickNotesAppTheme {
 
-        val viewModel = viewModel { HomeViewModel() }
+        val viewModel = viewModel { HomeViewModel(database) }
         val bottomSheetState = rememberModalBottomSheetState()
         var showBottomSheet by remember { mutableStateOf(false) }
         val coroutineScope = rememberCoroutineScope()
@@ -56,7 +57,7 @@ fun App() {
                 }
             }) {
 
-            val notes = viewModel.notes.collectAsStateWithLifecycle()
+            val notes = viewModel.notes.collectAsStateWithLifecycle(emptyList())
             Column(modifier = Modifier.padding(it)) {
                 Text(
                     text = "Notes",
