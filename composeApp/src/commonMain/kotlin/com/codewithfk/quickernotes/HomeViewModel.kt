@@ -2,7 +2,7 @@ package com.codewithfk.quickernotes
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.codewithfk.quickernotes.db.NoteDatabase
+import com.codewithfk.quickernotes.data.db.NoteDatabase
 import com.codewithfk.quickernotes.model.Note
 
 import kotlinx.coroutines.launch

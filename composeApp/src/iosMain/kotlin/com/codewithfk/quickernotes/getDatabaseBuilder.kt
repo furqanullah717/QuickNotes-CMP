@@ -2,7 +2,7 @@ package com.codewithfk.quickernotes
 
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.codewithfk.quickernotes.db.NoteDatabase
+import com.codewithfk.quickernotes.data.db.NoteDatabase
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager

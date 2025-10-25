@@ -34,7 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.codewithfk.quickernotes.HomeViewModel
-import com.codewithfk.quickernotes.db.NoteDatabase
+import com.codewithfk.quickernotes.data.db.NoteDatabase
 import com.codewithfk.quickernotes.model.Note
 import com.codewithfk.quickernotes.notes.ListNotesScreen
 import kotlinx.coroutines.launch

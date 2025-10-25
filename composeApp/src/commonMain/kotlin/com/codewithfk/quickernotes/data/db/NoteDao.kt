@@ -1,4 +1,4 @@
-package com.codewithfk.quickernotes.db
+package com.codewithfk.quickernotes.data.db
 
 import androidx.room.Dao
 import androidx.room.Insert
