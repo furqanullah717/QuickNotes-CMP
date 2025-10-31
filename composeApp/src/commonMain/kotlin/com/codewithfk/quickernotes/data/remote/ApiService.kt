@@ -8,42 +8,43 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.HttpStatusCode
 
-expect val BASE_URL: String
+expect val BASE_URL_EMULATOR: String
+const val BASE_URL = "http://localhost:8080"
 
-class ApiService(private val client: HttpClient) {
+class ApiService(val client: HttpClient) {
+    private val ACTIVE_URL = BASE_URL_EMULATOR
+    private val LOGIN_ENDPOINT = "${ACTIVE_URL}/auth/login"
+    private val SIGNUP_ENDPOINT = "${ACTIVE_URL}/auth/signup"
 
-    private val AUTH = "$BASE_URL/auth"
-    private val SIGN_IN_ENDPOINT = "$AUTH/login"
-    private val SIGN_UP_ENDPOINT = "$AUTH/signup"
-
-    suspend fun signIn(request: AuthRequest): Result<AuthResponse> {
+    suspend fun login(request: AuthRequest): Result<AuthResponse> {
         return try {
-            val response = client.post(SIGN_IN_ENDPOINT) {
+            val response = client.post(urlString = LOGIN_ENDPOINT) {
                 setBody(request)
             }
             if (response.status == HttpStatusCode.OK) {
                 Result.success(response.body() as AuthResponse)
             } else {
-                Result.failure(Exception("Something went wrong"))
+                Result.failure(Exception("Failed to load data"))
             }
+
         } catch (ex: Exception) {
             Result.failure(ex)
         }
     }
 
-    suspend fun signUp(request: AuthRequest): Result<AuthResponse> {
+    suspend fun signup(request: AuthRequest): Result<AuthResponse> {
         return try {
-            val response = client.post(SIGN_UP_ENDPOINT) {
+            val response = client.post(urlString = SIGNUP_ENDPOINT) {
                 setBody(request)
             }
             if (response.status == HttpStatusCode.Created) {
                 Result.success(response.body() as AuthResponse)
             } else {
-                Result.failure(Exception("Something went wrong"))
+                Result.failure(Exception("Failed to load data"))
             }
+
         } catch (ex: Exception) {
             Result.failure(ex)
         }
     }
-
 }

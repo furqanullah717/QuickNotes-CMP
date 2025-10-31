@@ -13,8 +13,13 @@ import kotlinx.coroutines.launch
 
 class SignInViewModel : ViewModel() {
 
-    private val apiService = ApiService(HttpClientFactory.getHttpClient())
+    private val _email = MutableStateFlow<String>("")
+    val email = _email.asStateFlow()
 
+    private val _password = MutableStateFlow<String>("")
+    val password = _password.asStateFlow()
+
+    private val apiService = ApiService(HttpClientFactory.getHttpClient())
     private val _uiState = MutableStateFlow<AuthState>(AuthState.Normal)
     val uiState = _uiState.asStateFlow()
 
@@ -22,13 +27,17 @@ class SignInViewModel : ViewModel() {
     val navigationFlow = _navigationFlow.asSharedFlow()
 
 
+    fun onErrorClick() {
+        viewModelScope.launch {
+            _uiState.value = AuthState.Normal
+        }
+    }
 
-    private val _email = MutableStateFlow<String>("")
-    val email = _email.asStateFlow()
-
-    private val _password = MutableStateFlow<String>("")
-    val password = _password.asStateFlow()
-
+    fun onSuccessClick(email: String) {
+        viewModelScope.launch {
+            _navigationFlow.emit(AuthNavigation.NavigateToHome(email))
+        }
+    }
 
     fun onEmailUpdated(email: String) {
         _email.value = email
@@ -37,27 +46,17 @@ class SignInViewModel : ViewModel() {
     fun onPasswordUpdated(password: String) {
         _password.value = password
     }
-    fun onErrorButtonClick() {
-        viewModelScope.launch {
-            _uiState.value = AuthState.Normal
-        }
-    }
 
-    fun onSuccessClick(){
-        viewModelScope.launch {
-            _navigationFlow.emit(AuthNavigation.NavigateToHome)
-        }
-    }
 
     fun signIn() {
         viewModelScope.launch {
-            val result = apiService.signIn(AuthRequest(email.value, password.value))
+            val request = AuthRequest(email.value, password.value)
+            _uiState.value = AuthState.Loading
+            val result = apiService.login(request)
             if (result.isSuccess) {
-                println(result.getOrNull())
                 _uiState.value = AuthState.Success(result.getOrNull()!!)
             } else {
-                println(result.exceptionOrNull())
-                _uiState.value = AuthState.Failed(result.exceptionOrNull()!!.message.toString())
+                _uiState.value = AuthState.Failure(result.exceptionOrNull()?.message.toString())
             }
         }
     }

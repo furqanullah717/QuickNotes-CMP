@@ -32,10 +32,14 @@ fun SignUpScreen(navController: NavController) {
     val confirmPass = viewModel.confirmPassword.collectAsStateWithLifecycle()
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(true) {
+    LaunchedEffect(true)
+    {
         viewModel.navigationFlow.collectLatest {
-            if (it is AuthNavigation.NavigateToHome) {
-                navController.popBackStack()
+            when (it) {
+                is AuthNavigation.NavigateToHome -> {
+                    navController.previousBackStackEntry?.savedStateHandle?.set("email",email.value)
+                    navController.popBackStack()
+                }
             }
         }
     }
@@ -52,36 +56,34 @@ fun SignUpScreen(navController: NavController) {
             }
         }
 
+        is AuthState.Failure -> {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("Error: ${(uiState.value as AuthState.Failure).error}")
+                Button(onClick = { viewModel.onErrorClick() }) {
+                    Text("Retry")
+                }
+            }
+        }
+
         is AuthState.Success -> {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                val success = (uiState.value as AuthState.Success).response
-                Text("Successful : ${success.userId}")
-                Button(onClick = {viewModel.onSuccessClick()}) {
-                    Text("Done")
+                val email = (uiState.value as AuthState.Success).response.email
+                Text("Successful: ${email}")
+                Button(onClick = { viewModel.onSuccessClick(email) }) {
+                    Text("Go Back")
                 }
             }
         }
 
-        is AuthState.Failed -> {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                val error = (uiState.value as AuthState.Failed).error
-                Text(error)
-                Button(onClick = {viewModel.onErrorButtonClick()}) {
-                    Text("Retry")
-                }
-            }
-        }
-
-        else -> {
-
+        is AuthState.Normal -> {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
@@ -125,6 +127,8 @@ fun SignUpScreen(navController: NavController) {
                     Text("Already have an account? SignIn")
                 }
                 Spacer(modifier = Modifier.size(16.dp))
+
+
 
                 Button({ viewModel.signup() }, modifier = Modifier.fillMaxWidth()) {
                     Text("Submit")

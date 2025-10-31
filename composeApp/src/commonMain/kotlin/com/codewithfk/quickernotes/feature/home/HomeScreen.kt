@@ -51,6 +51,9 @@ fun HomeScreen(database: NoteDatabase, navController: NavController) {
     var showBottomSheet by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
+    val email = navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<String>("email", "")
+        ?.collectAsStateWithLifecycle()
+
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = {
@@ -69,9 +72,22 @@ fun HomeScreen(database: NoteDatabase, navController: NavController) {
                     modifier = Modifier.fillMaxWidth().padding(16.dp).align(Alignment.Center),
                     fontSize = 30.sp
                 )
-                Image(painterResource(Res.drawable.user), null, modifier = Modifier.padding(end = 16.dp).size(48.dp).padding(4.dp).clickable{
-                    navController.navigate("signup")
-                }.align(Alignment.CenterEnd))
+                Row(
+                    modifier = Modifier.align(Alignment.CenterEnd),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    email?.value?.let {
+                        Text(it)
+                    }
+                    Image(
+                        painterResource(Res.drawable.user),
+                        null,
+                        modifier = Modifier.padding(end = 16.dp).size(48.dp).padding(4.dp)
+                            .clickable {
+                                navController.navigate("signup")
+                            })
+                }
+
             }
             if (notes.value.isNotEmpty()) {
                 ListNotesScreen(notes.value)

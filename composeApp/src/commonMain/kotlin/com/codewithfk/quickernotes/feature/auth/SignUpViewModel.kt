@@ -1,6 +1,5 @@
 package com.codewithfk.quickernotes.feature.auth
 
-import androidx.compose.ui.graphics.Path
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codewithfk.quickernotes.data.remote.ApiService
@@ -16,13 +15,24 @@ import kotlinx.coroutines.launch
 class SignUpViewModel : ViewModel() {
 
     private val apiService = ApiService(HttpClientFactory.getHttpClient())
-
     private val _uiState = MutableStateFlow<AuthState>(AuthState.Normal)
     val uiState = _uiState.asStateFlow()
 
     private val _navigationFlow = MutableSharedFlow<AuthNavigation>()
     val navigationFlow = _navigationFlow.asSharedFlow()
 
+
+    fun onErrorClick() {
+        viewModelScope.launch {
+            _uiState.value = AuthState.Normal
+        }
+    }
+
+    fun onSuccessClick(email: String) {
+        viewModelScope.launch {
+            _navigationFlow.emit(AuthNavigation.NavigateToHome(email))
+        }
+    }
 
     private val _email = MutableStateFlow<String>("")
     val email = _email.asStateFlow()
@@ -46,40 +56,27 @@ class SignUpViewModel : ViewModel() {
         _confirmPassword.value = password
     }
 
-    fun onErrorButtonClick() {
-        viewModelScope.launch {
-            _uiState.value = AuthState.Normal
-        }
-    }
-
-    fun onSuccessClick(){
-        viewModelScope.launch {
-            _navigationFlow.emit(AuthNavigation.NavigateToHome)
-        }
-    }
-
     fun signup() {
         viewModelScope.launch {
+            val request = AuthRequest(email.value, password.value)
             _uiState.value = AuthState.Loading
-            val result = apiService.signUp(AuthRequest(email.value, password.value))
+            val result = apiService.signup(request)
             if (result.isSuccess) {
-                println(result.getOrNull())
                 _uiState.value = AuthState.Success(result.getOrNull()!!)
             } else {
-                println(result.exceptionOrNull())
-                _uiState.value = AuthState.Failed(result.exceptionOrNull()!!.message.toString())
+                _uiState.value = AuthState.Failure(result.exceptionOrNull()?.message.toString())
             }
         }
     }
 }
 
 sealed class AuthNavigation {
-    object NavigateToHome : AuthNavigation()
+    class NavigateToHome(val email: String) : AuthNavigation()
 }
 
 sealed class AuthState {
     object Normal : AuthState()
     object Loading : AuthState()
     class Success(val response: AuthResponse) : AuthState()
-    class Failed(val error: String) : AuthState()
+    class Failure(val error: String) : AuthState()
 }
