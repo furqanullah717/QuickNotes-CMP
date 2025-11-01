@@ -3,7 +3,7 @@ package com.codewithfk.quickernotes
 import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.codewithfk.quickernotes.db.NoteDatabase
+import com.codewithfk.quickernotes.data.db.NoteDatabase
 
 
 fun getDatabaseBuilder(context: Context): RoomDatabase.Builder<NoteDatabase> {
