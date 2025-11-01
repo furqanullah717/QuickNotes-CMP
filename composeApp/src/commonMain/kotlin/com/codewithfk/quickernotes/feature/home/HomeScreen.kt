@@ -19,6 +19,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.codewithfk.quickernotes.HomeViewModel
+import com.codewithfk.quickernotes.data.cache.DataStoreManager
 import com.codewithfk.quickernotes.data.db.NoteDatabase
 import com.codewithfk.quickernotes.model.Note
 import com.codewithfk.quickernotes.notes.ListNotesScreen
@@ -45,15 +47,20 @@ import quickernotes.composeapp.generated.resources.user
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(database: NoteDatabase, navController: NavController) {
-    val viewModel = viewModel { HomeViewModel(database) }
+fun HomeScreen(
+    database: NoteDatabase,
+    dataStoreManager: DataStoreManager,
+    navController: NavController
+) {
+    val viewModel = viewModel { HomeViewModel(database, dataStoreManager = dataStoreManager) }
     val bottomSheetState = rememberModalBottomSheetState()
     var showBottomSheet by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
-    val email = navController.currentBackStackEntry?.savedStateHandle?.getStateFlow<String>("email", "")
-        ?.collectAsStateWithLifecycle()
-
+    val email = remember { mutableStateOf("") }
+    LaunchedEffect(true) {
+        email.value = dataStoreManager.getEmail() ?: ""
+    }
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = {
@@ -84,7 +91,13 @@ fun HomeScreen(database: NoteDatabase, navController: NavController) {
                         null,
                         modifier = Modifier.padding(end = 16.dp).size(48.dp).padding(4.dp)
                             .clickable {
-                                navController.navigate("signup")
+                                coroutineScope.launch {
+                                    if (dataStoreManager.getToken() != null) {
+                                        navController.navigate("profile")
+                                    } else {
+                                        navController.navigate("signup")
+                                    }
+                                }
                             })
                 }
 

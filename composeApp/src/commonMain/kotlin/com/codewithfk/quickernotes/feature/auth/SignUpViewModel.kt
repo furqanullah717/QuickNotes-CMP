@@ -2,6 +2,7 @@ package com.codewithfk.quickernotes.feature.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.codewithfk.quickernotes.data.cache.DataStoreManager
 import com.codewithfk.quickernotes.data.remote.ApiService
 import com.codewithfk.quickernotes.data.remote.HttpClientFactory
 import com.codewithfk.quickernotes.model.AuthRequest
@@ -12,7 +13,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class SignUpViewModel : ViewModel() {
+class SignUpViewModel(private val dataStoreManager: DataStoreManager) : ViewModel() {
 
     private val apiService = ApiService(HttpClientFactory.getHttpClient())
     private val _uiState = MutableStateFlow<AuthState>(AuthState.Normal)
@@ -63,6 +64,12 @@ class SignUpViewModel : ViewModel() {
             val result = apiService.signup(request)
             if (result.isSuccess) {
                 _uiState.value = AuthState.Success(result.getOrNull()!!)
+                result.getOrNull()?.let {
+                    dataStoreManager.storeEmail(it.email)
+                    dataStoreManager.storeUserId(it.userId)
+                    dataStoreManager.storeRefreshToken(it.refreshToken)
+                    dataStoreManager.storeToken(it.accessToken)
+                }
             } else {
                 _uiState.value = AuthState.Failure(result.exceptionOrNull()?.message.toString())
             }

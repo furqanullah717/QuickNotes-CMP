@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import com.codewithfk.quickernotes.data.cache.DataStoreManager
 import com.codewithfk.quickernotes.data.db.getNoteDatabase
 
 class MainActivity : ComponentActivity() {
@@ -16,7 +17,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             App(
-                database = getNoteDatabase(getDatabaseBuilder(this@MainActivity))
+                database = getNoteDatabase(getDatabaseBuilder(this@MainActivity)),
+                dataStoreManager = DataStoreManager(createDataStore(this@MainActivity))
             )
         }
     }
@@ -26,5 +28,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppAndroidPreview() {
     val database = getNoteDatabase(getDatabaseBuilder(LocalContext.current))
-    App(database)
+    val dataStoreManager = DataStoreManager(createDataStore(LocalContext.current))
+    App(database, dataStoreManager)
 }
