@@ -50,13 +50,16 @@ fun PreviewLisT() {
         listOf(
             Note(
                 title = "This is the first note that i want to show to the users.",
-                description = "Description"
+                description = "Description",
+                userId = 1.toString()
             ), Note(
                 title = "This is the first note that i want to show to the users.",
-                description = "Description"
+                description = "Description",
+                userId = 1.toString()
             ), Note(
                 title = "This is the first note that i want to show to the users.",
-                description = "Description"
+                description = "Description",
+                userId = 1.toString()
             )
         )
     )

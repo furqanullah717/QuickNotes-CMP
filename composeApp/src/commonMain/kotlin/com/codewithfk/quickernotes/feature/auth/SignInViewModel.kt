@@ -20,7 +20,7 @@ class SignInViewModel(private val dataStoreManager: DataStoreManager) : ViewMode
     private val _password = MutableStateFlow<String>("")
     val password = _password.asStateFlow()
 
-    private val apiService = ApiService(HttpClientFactory.getHttpClient())
+    private val apiService = ApiService(HttpClientFactory.getHttpClient(), dataStoreManager)
     private val _uiState = MutableStateFlow<AuthState>(AuthState.Normal)
     val uiState = _uiState.asStateFlow()
 

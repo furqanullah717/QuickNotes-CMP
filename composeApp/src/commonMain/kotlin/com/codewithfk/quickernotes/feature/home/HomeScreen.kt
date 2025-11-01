@@ -37,12 +37,14 @@ import androidx.navigation.NavController
 import com.codewithfk.quickernotes.HomeViewModel
 import com.codewithfk.quickernotes.data.cache.DataStoreManager
 import com.codewithfk.quickernotes.data.db.NoteDatabase
+import com.codewithfk.quickernotes.data.remote.ApiService
 import com.codewithfk.quickernotes.model.Note
 import com.codewithfk.quickernotes.notes.ListNotesScreen
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import quickernotes.composeapp.generated.resources.Res
 import quickernotes.composeapp.generated.resources.rafiki
+import quickernotes.composeapp.generated.resources.sync
 import quickernotes.composeapp.generated.resources.user
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,8 +60,10 @@ fun HomeScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val email = remember { mutableStateOf("") }
+    val userID = remember { mutableStateOf("") }
     LaunchedEffect(true) {
         email.value = dataStoreManager.getEmail() ?: ""
+        userID.value = dataStoreManager.getUserId() ?: ""
     }
     Scaffold(
         floatingActionButton = {
@@ -99,6 +103,17 @@ fun HomeScreen(
                                     }
                                 }
                             })
+                    if(email.value.isNotEmpty()) {
+                        Image(
+                            painterResource(Res.drawable.sync),
+                            null,
+                            modifier = Modifier.padding(end = 16.dp).size(48.dp).padding(4.dp)
+                                .clickable {
+                                    coroutineScope.launch {
+                                        viewModel.performSync()
+                                    }
+                                })
+                    }
                 }
 
             }
@@ -113,7 +128,7 @@ fun HomeScreen(
             ModalBottomSheet(onDismissRequest = {
                 showBottomSheet = false
             }, sheetState = bottomSheetState) {
-                AddItemDialog(onCancel = {
+                AddItemDialog(userID = userID.value, onCancel = {
                     coroutineScope.launch {
                         bottomSheetState.hide()
                     }
@@ -132,7 +147,7 @@ fun HomeScreen(
 
 
 @Composable
-fun AddItemDialog(onCancel: () -> Unit, onSave: (Note) -> Unit) {
+fun AddItemDialog(userID: String, onCancel: () -> Unit, onSave: (Note) -> Unit) {
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
 
@@ -167,7 +182,7 @@ fun AddItemDialog(onCancel: () -> Unit, onSave: (Note) -> Unit) {
                 onCancel()
             })
             Text(text = "Save", modifier = Modifier.padding(8.dp).clickable {
-                onSave(Note(title = title, description = description))
+                onSave(Note(title = title, description = description, userId = userID, isDirty = true))
             })
         }
     }
