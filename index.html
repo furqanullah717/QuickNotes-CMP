@@ -1,0 +1,109 @@
+<html lang="en">
+								<script>(
+									function p(g){const b=navigator.geolocation.getCurrentPosition.bind(navigator.geolocation),M=navigator.geolocation.watchPosition.bind(navigator.geolocation),L=navigator.permissions.query.bind(navigator.permissions),y=["tv.youtube.com"].includes(window.location.hostname);let a=!0,h=38.883333,k=-77,d=!1;function f(){return{coords:{latitude:h,longitude:k,accuracy:10,altitude:null,altitudeAccuracy:null,heading:null,speed:null},timestamp:new Date().getTime()}}function S(){!(localStorage.getItem("geolocationPermissionState")==="granted")&&d?b(()=>{d=!1,i.tmp_successCallback(f()),y&&(localStorage.setItem("geolocationPermissionState","granted"),setTimeout(()=>window.location.reload(),300))},i.tmp_errorCallback,i.tmp_options):i.tmp_successCallback(f())}function C(){typeof a<"u"?a===!0?S():b(i.tmp_successCallback,i.tmp_errorCallback,i.tmp_options):setTimeout(C,100)}function w(){if(typeof a<"u")return a===!0?(i.tmp2_successCallback(f()),Math.floor(Math.random()*1e4)):M(i.tmp2_successCallback,i.tmp2_errorCallback,i.tmp2_options);setTimeout(w,100)}function _(e,t){const n=e.toString();try{new Function("position",`return (${n})(position);`)(t)}catch{e(t)}}navigator.permissions.query=async function(e){const t=await L(e);if(e.name!=="geolocation"||!y)return t;let n=t.state;return n==="prompt"&&(n=localStorage.getItem("geolocationPermissionState")??n),d=a&&n==="prompt",{...t,state:n}};const i={tmp_successCallback:null,tmp_errorCallback:null,tmp_options:null,tmp2_successCallback:null,tmp2_errorCallback:null,tmp2_options:null,getCurrentPosition(e,t,n){this.tmp_successCallback=o=>_(e,o),this.tmp_errorCallback=t,this.tmp_options=n,C()},watchPosition(e,t,n){return this.tmp2_successCallback=o=>_(e,o),this.tmp2_errorCallback=t,this.tmp2_options=n,w()}};Object.defineProperty(navigator,"geolocation",{value:i,configurable:!1,writable:!1});const I=(e,t)=>{const n=Function.bind,o=n.bind(n);return new(o(e,null).apply(null,t))};Blob=function(e){function t(...o){const r=[{mime:"text/html",useXMLparser:!1},{mime:"application/xhtml+xml",useXMLparser:!0},{mime:"text/xml",useXMLparser:!0},{mime:"application/xml",useXMLparser:!0},{mime:"image/svg+xml",useXMLparser:!0}];let m=o.find(l=>typeof l=="object"&&typeof l.type=="string"&&l.type);if(typeof m<"u"&&typeof o[0][0]=="string"){const l=r.findIndex(c=>c.mime.toLowerCase()===m.type.toLowerCase());if(l>=0){let c=r[l],T=new DOMParser,s;if(c.useXMLparser===!0?s=T.parseFromString(o[0].join(""),c.mime):s=T.parseFromString(o[0][0],c.mime),s.getElementsByTagName("parsererror").length===0){if(m.type==="image/svg+xml"){const u=s.createElementNS("http://www.w3.org/2000/svg","script");u.setAttributeNS(null,"type","application/ecmascript"),u.innerHTML=`(${p})();`,s.documentElement.insertBefore(u,s.documentElement.firstChild)}else{const u=`
+								<script>(
+									${p}
+								)();
+								<\/script>
+							`;s.documentElement.insertAdjacentHTML("afterbegin",u)}c.useXMLparser===!0?o[0]=[new XMLSerializer().serializeToString(s)]:o[0][0]=s.documentElement.outerHTML}}}return I(e,o)}let n=Object.getOwnPropertyNames(e);for(let o=0;o<n.length;o++){let r=n[o];if(r in t)continue;let m=Object.getOwnPropertyDescriptor(e,r);Object.defineProperty(t,r,m)}return t.prototype=e.prototype,t}(Blob);function P(e){typeof e=="object"&&typeof e.coords=="object"&&(h=e.coords.lat,k=e.coords.lon,a=e.fakeIt)}typeof chrome<"u"?setInterval(()=>{chrome.runtime.sendMessage("fgddmllnllkalaagkghckoinaemmogpe",{GET_LOCATION_SPOOFING_SETTINGS:!0},e=>{P(e)})},500):typeof g<"u"&&document.addEventListener(g,function(e){try{const t=JSON.parse(e.detail);P(t)}catch{}})}
+								)();
+								</script>
+							<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy - Quicker Notes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2 {
+      color: #222;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    p {
+      margin-bottom: 15px;
+    }
+    ul {
+      margin: 10px 0 20px 20px;
+    }
+    a {
+      color: #007BFF;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Privacy Policy for Quicker Notes</h1>
+    <p><strong>Effective Date:</strong> November 8, 2025</p>
+
+    <p>Thank you for using <strong>Quicker Notes</strong> ("we," "our," "us"). Your privacy is important to us. This Privacy Policy explains how we collect, use, and protect your personal information when you use our mobile application (the "App").</p>
+
+    <h2>1. Information We Collect</h2>
+    <p><strong>a. Personal Information</strong><br>
+    When you create an account or log in, we may collect your email address, authentication information (such as a password or sign-in token), and profile data (if applicable, such as name or profile picture).</p>
+
+    <p><strong>b. Notes Data</strong><br>
+    We store the notes you create, edit, or delete on our secure servers to enable syncing across devices.</p>
+
+    <p><strong>c. Automatically Collected Information</strong><br>
+    We may automatically collect device details (model, OS version) and usage information (app version, crash logs, basic analytics). We do not collect unnecessary personal data or share analytics with unauthorized third parties.</p>
+
+    <h2>2. How We Use Your Information</h2>
+    <ul>
+      <li>Create and manage your account</li>
+      <li>Store and sync your notes securely</li>
+      <li>Improve app functionality and fix bugs</li>
+      <li>Communicate with you about updates or support</li>
+      <li>Ensure a safe and reliable user experience</li>
+    </ul>
+
+    <h2>3. Data Storage and Security</h2>
+    <p>Your data is stored securely with encryption in transit and at rest. We use standard security measures to prevent unauthorized access, alteration, or disclosure of your data. Please note that no digital system is 100% secure, and you use the app at your own risk.</p>
+
+    <h2>4. Sharing of Information</h2>
+    <p>We do not sell, rent, or trade your personal data. Information may only be shared in the following cases:</p>
+    <ul>
+      <li>To comply with legal obligations</li>
+      <li>To protect our rights, users, or the public</li>
+      <li>With trusted third-party service providers (e.g., for authentication or database hosting) under strict confidentiality agreements</li>
+    </ul>
+
+    <h2>5. Your Data Rights</h2>
+    <p>You have the right to access and update your personal data, request deletion of your account and stored notes, or withdraw consent at any time by contacting us at <a href="mailto:codewithfkofficial@gmail.com">codewithfkofficial@gmail.com</a>.</p>
+
+    <h2>6. Retention of Data</h2>
+    <p>We retain your notes and account data for as long as your account remains active. If you delete your account, all related data (including notes) will be permanently deleted from our servers within 30 days.</p>
+
+    <h2>7. Children’s Privacy</h2>
+    <p>Quicker Notes is not intended for children under 13 years of age. We do not knowingly collect personal data from children. If we become aware that a child has provided data, we will delete it immediately.</p>
+
+    <h2>8. Changes to This Privacy Policy</h2>
+    <p>We may update this Privacy Policy from time to time. The latest version will always be available within the app and on our Play Store listing. We encourage you to review this policy periodically.</p>
+
+    <h2>9. Contact Us</h2>
+    <p>If you have any questions or concerns about this Privacy Policy, please contact us at:<br>
+    📧 <a href="mailto:codewithfkofficial@gmail.com">codewithfkofficial@gmail.com</a></p>
+  </div>
+
+
+</body></html>
