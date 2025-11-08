@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 
 import kotlinx.coroutines.launch
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 class HomeViewModel(
     val noteDatabase: NoteDatabase,
@@ -73,6 +75,14 @@ class HomeViewModel(
     fun addNotes(note: Note) {
         viewModelScope.launch {
             dao.insertNote(note)
+            performSync()
+        }
+    }
+
+    @OptIn(ExperimentalTime::class)
+    fun deleteNote(it: Note) {
+        viewModelScope.launch {
+            dao.softDeleteNote(it.id, Clock.System.now().toString())
             performSync()
         }
     }

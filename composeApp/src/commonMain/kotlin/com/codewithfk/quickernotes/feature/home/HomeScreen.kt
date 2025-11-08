@@ -103,7 +103,7 @@ fun HomeScreen(
                                     }
                                 }
                             })
-                    if(email.value.isNotEmpty()) {
+                    if (email.value.isNotEmpty()) {
                         Image(
                             painterResource(Res.drawable.sync),
                             null,
@@ -118,7 +118,9 @@ fun HomeScreen(
 
             }
             if (notes.value.isNotEmpty()) {
-                ListNotesScreen(notes.value)
+                ListNotesScreen(notes.value, onDelete = {
+                    viewModel.deleteNote(it)
+                })
             } else {
                 EmptyView()
             }
@@ -182,7 +184,14 @@ fun AddItemDialog(userID: String, onCancel: () -> Unit, onSave: (Note) -> Unit) 
                 onCancel()
             })
             Text(text = "Save", modifier = Modifier.padding(8.dp).clickable {
-                onSave(Note(title = title, description = description, userId = userID, isDirty = true))
+                onSave(
+                    Note(
+                        title = title,
+                        description = description,
+                        userId = userID,
+                        isDirty = true
+                    )
+                )
             })
         }
     }
