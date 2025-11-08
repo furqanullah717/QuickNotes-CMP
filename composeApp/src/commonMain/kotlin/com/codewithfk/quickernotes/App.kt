@@ -11,13 +11,15 @@ import com.codewithfk.quickernotes.feature.auth.SignInScreen
 import com.codewithfk.quickernotes.feature.auth.SignUpScreen
 import com.codewithfk.quickernotes.feature.home.HomeScreen
 import com.codewithfk.quickernotes.feature.profile.UserProfile
+import com.codewithfk.quickernotes.feature.settings.SettingsScreen
 import com.codewithfk.quickernotes.ui.theme.QuickNotesAppTheme
+import com.codewithfk.quickernotes.utils.UrlUtils
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
-fun App(database: NoteDatabase, dataStoreManager: DataStoreManager) {
+fun App(database: NoteDatabase, dataStoreManager: DataStoreManager, urlUtils: UrlUtils) {
     QuickNotesAppTheme {
 
         val navController = rememberNavController()
@@ -38,9 +40,9 @@ fun App(database: NoteDatabase, dataStoreManager: DataStoreManager) {
             composable("profile") {
                 UserProfile(dataStoreManager)
             }
-//            composable (route="login"){
-//                LoginScreen()
-//            }
+            composable (route="settings"){
+                SettingsScreen(navController,urlUtils)
+            }
 //            composable (route="login"){
 //                LoginScreen()
 //            }

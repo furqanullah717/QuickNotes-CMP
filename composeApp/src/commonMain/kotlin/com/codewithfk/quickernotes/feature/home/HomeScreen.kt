@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Transparent
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,6 +46,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import quickernotes.composeapp.generated.resources.Res
 import quickernotes.composeapp.generated.resources.rafiki
+import quickernotes.composeapp.generated.resources.settings
 import quickernotes.composeapp.generated.resources.sync
 import quickernotes.composeapp.generated.resources.user
 
@@ -87,9 +90,7 @@ fun HomeScreen(
                     modifier = Modifier.align(Alignment.CenterEnd),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    email?.value?.let {
-                        Text(it)
-                    }
+
                     Image(
                         painterResource(Res.drawable.user),
                         null,
@@ -103,6 +104,16 @@ fun HomeScreen(
                                     }
                                 }
                             })
+                    Image(
+                        painterResource(Res.drawable.settings),
+                        null,
+                        modifier = Modifier.padding(end = 16.dp).size(48.dp).padding(4.dp)
+                            .clickable {
+                                navController.navigate("settings")
+
+                            },
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
+                    )
                     if (email.value.isNotEmpty()) {
                         Image(
                             painterResource(Res.drawable.sync),
